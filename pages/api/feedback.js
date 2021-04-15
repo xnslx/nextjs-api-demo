@@ -13,12 +13,14 @@ function handler(req, res) {
         };
         console.log('newFeedback', newFeedback)
         const filePath = path.join(process.cwd(), 'data', 'feedback.json')
+        console.log('filePath', filePath)
         const fileData = fs.readFileSync(filePath);
+        console.log('fileData', fileData)
         const data = JSON.parse(fileData);
         console.log('data',data)
         data.push(newFeedback);
         fs.writeFileSync(filePath, JSON.stringify(data))
-        res.status(201).json({message:'success', feedback: newFeedback})
+        res.status(201).json({message:'success', feedback: {}})
     } else {
         res.status(200).json({message: 'This works!'}) 
     }
