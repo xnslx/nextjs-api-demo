@@ -1,8 +1,9 @@
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  const [feedbackItems, setFeedbackItems] = useState([])
   const emailInput = useRef();
   const feedbackInput = useRef();
 
@@ -21,8 +22,19 @@ export default function Home() {
       },
     })
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+      console.log('data', data)
+    })
   }
+
+  const loadFeedbackHandler = (e) => {
+    fetch('/api/feedback')
+    .then(response => response.json())
+    .then(data => {
+      setFeedbackItems(data.feedback)
+    })
+  }
+
   return (
     <div>
       <h1>The Home Page.</h1>
@@ -37,6 +49,11 @@ export default function Home() {
         </div>
         <button>Send Feedback</button>
       </form>
+      <hr/>
+      <button onClick={loadFeedbackHandler}>Load Feedback</button>
+      <ul>
+        {feedbackItems.map(item => <li key={item.id}>{item.text}</li>)}
+      </ul>
     </div>
   )
 }
